@@ -1,0 +1,19 @@
+.popup__heading {
+  box-sizing: border-box;
+  padding-bottom: 20px;
+  font-style: normal;
+  line-height: 29px;
+  font-weight: 900;
+  font-size: 24px;
+  color: #000000;
+}
+
+
+@media screen and (max-width: 680px) {
+  .form__heading {
+    padding-bottom: 40px;
+    line-height: 22px;
+    max-width: 238px;
+    font-size: 18px;
+  }
+}

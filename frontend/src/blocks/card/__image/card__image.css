@@ -1,0 +1,8 @@
+.card__image {
+  width: 282px;
+  height: 282px;
+  object-fit: cover;
+  background-size: cover;
+  display: block;
+  border-radius: 10px 10px 0 0;
+}

@@ -1,0 +1,5 @@
+.profile__info-container {
+    max-width: 336px;
+    display: flex;
+    justify-content: space-between;
+}
