@@ -5,6 +5,8 @@ const BadRequest = require('../errors/BadRequest');
 const Conflict = require('../errors/Conflict');
 const userSchema = require('../models/user');
 
+const { JWT_SECRET } = require('../config');
+
 module.exports.getUsers = (req, res, next) => {
   userSchema.find({})
     .then((users) => res.send(users))
@@ -88,6 +90,7 @@ module.exports.updateUser = (req, res, next) => {
 
 module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
+  console.log(req.body.avatar);
   userSchema
     .findByIdAndUpdate(
       req.user._id,
@@ -111,7 +114,7 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return userSchema.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, process.env.NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
       res.send({ token });
     })
     .catch(next);

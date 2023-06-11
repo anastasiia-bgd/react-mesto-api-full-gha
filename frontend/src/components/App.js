@@ -25,7 +25,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [isSuccessPopupOpen, setIsSuccessPopupOpen] = useState(false);
@@ -163,15 +163,12 @@ function App() {
   }
 
   function handleUpdateAvatar(avatar) {
-  setIsLoading(true);
     api.changeAvatar(avatar)
       .then(data => {
-        console.log(data);
         setCurrentUser(data);
         closeAllPopups();
       })
       .catch(err => console.log(err))
-      .finally(() => setIsLoading(false));
   }
 
   function handleAddPlaceSubmit(inputData) {
