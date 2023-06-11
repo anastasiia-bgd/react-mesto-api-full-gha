@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'https://api.anastasiia.mesto.nomoredomains.rocks';
 
 
 const handleCheckResponse = response => response.ok ? response.json() : Promise.reject(`Ошибка ${response.status}`)
