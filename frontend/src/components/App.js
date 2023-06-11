@@ -41,16 +41,7 @@ function App() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (loggedIn) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
-        .then(([profileInfo, cardsData]) => {
-          setCurrentUser(profileInfo);
-          setCards(cardsData);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [loggedIn]);
+ 
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false)
@@ -80,12 +71,13 @@ function App() {
   function handleAuthUser(email, password) {
     auth.loginUser(email, password)
       .then((data) => {
-        if (data) {
+        console.log(data);
+        // if (data) {
           setUserEmail(email);
           setLoggedIn(true);
           localStorage.setItem("jwt", data);
           navigate("/");
-        }
+        // }
       })
       .catch((err) => {
         setIsInfoTolltipSuccess(false);
@@ -93,31 +85,57 @@ function App() {
         console.log(err);
       });
   }
-
+  
   function handleSingOut() {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
-    setUserEmail("");
-    navigate("/sign-in"); 
+    // setUserEmail("");
+    navigate("/signin");
   }
 
+  // useEffect(() => {
+  //   const token = localStorage.getItem("jwt");
+  //   if (token) {
+  //     console.log(token);
+  //     api.getUserInfo()
+  //       .then(([cardData, userData]) => {
+  //         console.log(cardData);
+  //         console.log(userData);
+  //         setCurrentUser(userData);
+  //         setCards(cardData)
+  //       })
+  //       .catch((err) => console.log(err))
+  //   }
+  // }, [loggedIn])
+
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    if (jwt) {
-      auth.checkToken(jwt)
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      auth.checkToken(token)
         .then((data) => {
-          if (data) {
-            setLoggedIn(true);
-            navigate("/");
-            setUserEmail(data.data.email); 
-          }
+          setLoggedIn(true);
+          setUserEmail(data.email);
+          navigate("/");
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+  }, [navigate]);
+
+   useEffect(() => {
+    if (loggedIn) {
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
+        .then(([profileInfo, cardsData]) => {
+          setCurrentUser(profileInfo);
+          setCards(cardsData.reverse());
         })
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [loggedIn, setCards]);
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some(id => id === currentUser._id);
     api.putLike(card._id, !isLiked)
       .then(newCard => setCards((
         state) => state.map(
@@ -134,20 +152,21 @@ function App() {
   }
 
   function handleUpdateUser(inputData) {
-    setIsLoading(true);
+    // setIsLoading(true);
     api.setUserInfo(inputData)
       .then(data => {
         setCurrentUser(data);
         closeAllPopups();
       })
       .catch(err => console.log(err))
-      .finally(() => setIsLoading(false));
+      // .finally(() => setIsLoading(false));
   }
 
   function handleUpdateAvatar(avatar) {
-    setIsLoading(true);
+  setIsLoading(true);
     api.changeAvatar(avatar)
       .then(data => {
+        console.log(data);
         setCurrentUser(data);
         closeAllPopups();
       })
@@ -156,14 +175,14 @@ function App() {
   }
 
   function handleAddPlaceSubmit(inputData) {
-    setIsLoading(true);
+    // setIsLoading(true);
     api.addNewCard(inputData)
       .then((res) => {
         setCards([res, ...cards]);
         closeAllPopups();
       })
       .catch((err) => console.log(err))
-      .finally(() => setIsLoading(false));
+      // .finally(() => setIsLoading(false));
   }
 
   useEffect(() => {
@@ -207,12 +226,12 @@ function App() {
             />
           </Routes>
           {loggedIn && <Footer />}
-         
+
           <AddPlacePopup
             onAddPlace={handleAddPlaceSubmit}
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
-            onLoading={isLoading}
+            // onLoading={isLoading}
           />
 
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
@@ -221,20 +240,20 @@ function App() {
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             onUpdateAvatar={handleUpdateAvatar}
-            onLoading={isLoading}
+            // onLoading={isLoading}
           />
 
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
-            onLoading={isLoading}
+            // onLoading={isLoading}
             onUpdateUser={handleUpdateUser}
           />
           <InfoTooltip
             name={"success"}
             onClose={closeAllPopups}
             isOpen={isSuccessPopupOpen}
-            text ={isInfoTolltipSuccess ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
+            text={isInfoTolltipSuccess ? 'Вы успешно зарегистрировались!' : 'Что-то пошло не так! Попробуйте ещё раз.'}
             image={isInfoTolltipSuccess ? okIcon : failIcon}
           />
         </div>

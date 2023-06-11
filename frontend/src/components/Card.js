@@ -4,13 +4,11 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 
 function Card({ card, onCardLike, onCardDelete, onCardClick }) {
     const currentUser = useContext(CurrentUserContext);
-    const isOwner = card.owner._id === currentUser._id;
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isOwner = card.owner === currentUser._id;
+    const isLiked = card.likes.some(id => id === currentUser._id);
 
     const cardLikeButtonClassName =
-        `card__like-button pointer ${isLiked ? 'card__like-button_active' : ''}`;
-
-    // const deleteButtonClassName = `card__trash pointer ${isOwner ? 'card__trash_active' : ''}`;
+        `card__like-button ${isLiked && 'card__like-button_active'}`;
 
     function handleCardClick() {
         onCardClick(card);

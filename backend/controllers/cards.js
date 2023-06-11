@@ -6,8 +6,8 @@ const BadRequest = require('../errors/BadRequest');
 module.exports.getCards = (req, res, next) => {
   cardSchema
     .find({})
-    .populate('owner')
-    .then((cards) => res.send({ data: cards }))
+    // .populate('owner')
+    .then((cards) => res.send(cards))
     .catch(next);
 };
 
@@ -40,7 +40,7 @@ module.exports.createCard = (req, res, next) => {
       owner,
     })
     .then((card) => res.status(201)
-      .send({ data: card }))
+      .send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequest('Incorrect data'));
@@ -60,7 +60,7 @@ module.exports.addLike = (req, res, next) => {
       if (!card) {
         return next(new NotFound('Сannot be found'));
       }
-      return res.send({ data: card });
+      return res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -81,7 +81,7 @@ module.exports.deleteLike = (req, res, next) => {
       if (!card) {
         return next(new NotFound('Сannot be found'));
       }
-      return res.send({ data: card });
+      return res.send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {

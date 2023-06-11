@@ -4,6 +4,7 @@ const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const router = require('./routes/router');
+// const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const {
   MONGO_URL = 'mongodb://localhost:27017/mestodb',
@@ -15,10 +16,19 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
+
 app.use(cookieParser());
 mongoose.connect(MONGO_URL);
 
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
+
+// app.use(requestLogger);
 app.use('/', router);
+// app.use(errorLogger);
 
 app.use(errors());
 

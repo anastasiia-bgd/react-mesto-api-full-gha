@@ -14,7 +14,7 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getUserById = (req, res, next) => {
   userSchema.findById(req.params.userId)
     .orFail()
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
         return next(new NotFound('User with such id is not found'));
@@ -77,7 +77,7 @@ module.exports.updateUser = (req, res, next) => {
       },
     )
     .orFail()
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
         return next(new NotFound('User with such id is not found'));
@@ -98,7 +98,7 @@ module.exports.updateAvatar = (req, res, next) => {
       },
     )
     .orFail()
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
         return next(new BadRequest('Incorrect avatar data'));
@@ -122,6 +122,6 @@ module.exports.getCurrentUser = (req, res, next) => {
     .orFail(() => {
       throw new NotFound('Пользователь с таким id не найден');
     })
-    .then((user) => res.send({ user }))
+    .then((user) => res.send(user))
     .catch(next);
 };
