@@ -14,7 +14,7 @@ module.exports.getCards = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   const { cardId } = req.params;
   cardSchema
-    .findByIdAndRemove(cardId)
+    .findById(cardId)
     .then((card) => {
       if (!card) {
         return next(new NotFound('Cannot be found'));

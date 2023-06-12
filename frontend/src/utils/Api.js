@@ -90,7 +90,7 @@ class Api {
       method: 'PATCH',
       headers: {
         authorization: `Bearer ${token}`,
-
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         avatar: data.avatar

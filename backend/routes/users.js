@@ -11,13 +11,13 @@ const {
 const {
   validationUserId,
   validationUpdateProfile,
-  // validationUpdateAvatar,
+  validationUpdateAvatar,
 } = require('../middlewares/validation');
 
 userRoutes.get('/', getUsers);
 userRoutes.get('/me', getCurrentUser);
 userRoutes.get('/:userId', validationUserId, getUserById);
 userRoutes.patch('/me', validationUpdateProfile, updateUser);
-userRoutes.patch('/me/avatar', updateAvatar);
+userRoutes.patch('/me/avatar', validationUpdateAvatar, updateAvatar);
 
 module.exports = userRoutes;

@@ -32,11 +32,11 @@ module.exports.validationUpdateProfile = celebrate({
   }),
 });
 
-// module.exports.validationUpdateAvatar = celebrate({
-//   body: Joi.object().keys({
-//     avatar: Joi.string().required().pattern(REGEXP),
-//   }),
-// });
+module.exports.validationUpdateAvatar = celebrate({
+  body: Joi.object().keys({
+    avatar: Joi.string().required().pattern(REGEXP),
+  }),
+});
 
 module.exports.validationCreateCard = celebrate({
   body: Joi.object().keys({
