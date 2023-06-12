@@ -81,7 +81,10 @@ module.exports.updateUser = (req, res, next) => {
     .orFail()
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'DocumentNotFoundError' || err.name === 'ValidationError') {
+      if (err.name === 'ValidationError') {
+        return next(new BadRequest('Incorrect data'));
+      }
+       else if (err.name === 'DocumentNotFoundError') {
         return next(new NotFound('User with such id is not found'));
       }
       return next(err);
@@ -103,11 +106,11 @@ module.exports.updateAvatar = (req, res, next) => {
     .orFail()
     .then((user) => res.send(user))
     .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new NotFound('Invalid user id passed'));
+      if (err.name === 'CastError' ||  err.name === 'ValidationError') {
+        return next(new BadRequest(`User id is not found`));
       }
       if (err.name === 'DocumentNotFoundError') {
-        return next(new BadRequest(`User id is not found`));
+        return next(new NotFound('Invalid user id passed'));
       }
       return next(err);
     });
